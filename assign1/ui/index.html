@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sentiment?</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/third-party/bootstrap-3.4.0.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <script src="js/third-party/jquery-3.4.1.min.js"></script>
+    <script src="js/third-party/bootstrap-3.4.0.min.js"></script>
+    <script src="js/third-party/axios.min.js"></script>
+    <script src="js/third-party/lodash.min.js"></script>
+    <script src="js/third-party/vue.js"></script>
+
+
+    <!--<link href="css/mdb.min.css" rel="stylesheet">-->
+    <link href="css/main.css" rel="stylesheet"/>
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">
+            Sentiment?
+          </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html">Home</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <!--<li>-->
+              <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Meet the Devs</a>-->
+              <!--<ul class="dropdown-menu">-->
+                <li><a href="https://www.cse.iitb.ac.in/~kartavya">Kartavya</a></li>
+                <li><a href="https://www.cse.iitb.ac.in/~shubhammishra">Shubham</a></li>
+                <li><a href="https://www.cse.iitb.ac.in/~sourabj">Sourab</a></li>
+              <!--</ul>-->
+            <!--</li>-->
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container-fluid">
+
+        <div id='app'>
+          <div class="container">
+
+            <div class="form-group">
+
+              <div class="row">
+
+                <div class="form-group col-xs-12">
+                  <div class="form-group shadow-textarea">
+                    <input class="form-control z-depth-1" id="link_image" rows="1" placeholder="Fantastic review here" v-model="sent"/>
+                  </div>
+                  <div class='col-md-4'>
+                    <input type="radio" v-model="model" value="layer0" checked=True>0 Layer</input><br>
+                    <input type="radio" v-model="model" value="layer1_relu"> 1 Layer / ReLU</input><br>
+                    <input type="radio" v-model="model" value="layer1_sigmoid">1 Layer / Sigmoid</input><br>
+                    <input type="radio" v-model="model" value="layer2_relu">2 Layer / ReLU</input><br>
+                    <input type="radio" v-model="model" value="layer2_sigmoid">2 Layer / Sigmoid</input><br>
+                    <input type="radio" v-model="model" value="layer3_relu">3 Layer / ReLU</input><br>
+                    <input type="radio" v-model="model" value="layer3_sigmoid">3 Layer / Sigmoid</input><br>
+                  </div>
+                  <div class='col-md-4'>
+                    <input type='radio' v-model='model' value='layer0_fasttext_300dim'>0 Layer / Fasttext</input><br>
+                    <input type='radio' v-model='model' value='layer1_relu_fasttext_300dim'>1 Layer / ReLU / Fasttext</input><br>
+                    <input type='radio' v-model='model' value='layer1_sigmoid_fasttext_300dim'>1 Layer / Sigmoid / Fasttext</input><br>
+                    <input type='radio' v-model='model' value='layer2_relu_fasttext_300dim'>2 Layer / ReLU / Fasttext</input><br>
+                    <input type='radio' v-model='model' value='layer2_sigmoid_fasttext_300dim'>2 Layer / Sigmoid / Fasttext</input><br>
+                    <input type='radio' v-model='model' value='layer3_relu_fasttext_300dim'>3 Layer / ReLU / Fasttext</input><br>
+                    <input type='radio' v-model='model' value='layer3_sigmoid_fasttext_300dim'>3 Layer / Sigmoid / Fasttext</input><br>
+                  </div>
+                  <div class='col-md-4'>
+                    <input type='radio' v-model='model' value='layer0_word2vec_100dim'>0 Layer / Word2Vec</input><br>
+                    <input type='radio' v-model='model' value='layer1_relu_word2vec_100dim'>1 Layer / ReLU / Word2Vec</input><br>
+                    <input type='radio' v-model='model' value='layer1_sigmoid_word2vec_100dim'>1 Layer / Sigmoid / Word2Vec</input><br>
+                    <input type='radio' v-model='model' value='layer2_relu_word2vec_100dim'>2 Layer / ReLU / Word2Vec</input><br>
+                    <input type='radio' v-model='model' value='layer2_sigmoid_word2vec_100dim'>2 Layer / Sigmoid / Word2Vec</input><br>
+                    <input type='radio' v-model='model' value='layer3_relu_word2vec_100dim'>3 Layer / ReLU / Word2Vec</input><br>
+                    <input type='radio' v-model='model' value='layer3_sigmoid_word2vec_100dim'>3 Layer / Sigmoid / Word2Vec</input><br>
+                  </div>
+
+                </div>
+
+
+              </div>
+              <div class="row">
+                <div class="form-group col-xs-6">
+                  <div >
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapse" id="more-options">
+
+                <br>
+              </div>
+
+          </div>
+          <div v-for="(item, index) in ratings" class="ratings">
+            <div :style="cssStyle(item)" class="rating"><span style="opacity: 100;"> {{ index + 1 }} </span><span class="percent">{{ 100 * item }}%<span></div>
+          </div>
+
+          <div id="status"><b>{{ status }}<br>{{ error }}</b></div>
+
+        </div>
+      </div>
+    </main>
+
+    <!--<script src="js/dropzone.js" type='text/javascript'></script>-->
+    <script src="js/third-party/crypto-js.js" type='text/javascript'></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
